@@ -1,3 +1,66 @@
+body {
+  /* background-image: url('/image/bg.jpeg') no-repeat center center fixed; */
+  background-image: url('/image/bg.jpeg');
+  background-color: #28323C;
+  background-repeat: no-repeat;
+  /* background-position: center; */
+  background-size: cover;
+  font-family: 'Ubuntu', sans-serif;
+}
+.container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Chat */
+.chat {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 55rem;
+  height: 58vh;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  box-shadow: 8px 8px 5px rgba(0, 0, 0, 0.3);
+}
+.top {
+  color: #FFF;
+  display: flex;
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+}
+.messages {
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+  flex: 1;
+}
+.bottom {
+  /* border: 2px solid rgb(28, 18, 172); */
+  display: flex;
+}
+.messageArea {
+  display: flex;
+  flex: 1;
+}
+.message {
+  display: flex;
+  /* border: 2px solid rgb(28, 18, 172); */
+  flex-direction: row;
+}
+.resize {
+  display: flex;
+  align-self: flex-end;
+}
+.resize:hover {
+  cursor: se-resize;
+}
+.author {
+  padding-right: 10px;
+}
 p {
-  font-size: 800%;
+  font-size: 100%;
 }
