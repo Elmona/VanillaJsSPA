@@ -1,13 +1,28 @@
-
+/*
 const InstaChat = require('./InstaChat')
-const Window = require('./Window')
 const Memory = require('./Memory')
+*/
+const Wm = require('./WindowManager')
+const wm = new Wm()
 
-const chatContainer = document.querySelector('#chatContainer')
-let chat = new InstaChat(chatContainer)
+wm.startDock()
+/*
+const dock = require('./Dock/app')
+dock(w)
+*/
+
+/*
+const Dock = require('./Dock/app')
+// const chatContainer = document.querySelector('#chatContainer')
+// const dock = new Dock()
+const dock = new Dock()
+*/
+/*
+let id = `0`
+let template = '#chat'
+const chat = new InstaChat(template, id)
+const window = new Window(id)
 chat.connect()
-
-const window = new Window()
-
-let memory = new Memory(4, 4, 'memoryContainer')
-memory.generateGame()
+*/
+// let memory = new Memory(4, 4, 'memoryContainer')
+// memory.generateGame()

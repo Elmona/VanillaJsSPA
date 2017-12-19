@@ -1,11 +1,12 @@
 const config = require('./config.json')
 
 class InstaChat {
-  constructor (container) {
+  constructor (template, id) {
     this.socket = null
-    let template = document.querySelector('#chat')
+    template = document.querySelector(template)
 
     this.chatDiv = document.importNode(template.content.firstElementChild, true)
+    this.chatDiv.setAttribute('id', `id${id}`)
     this.messages = []
     this.chatDiv.addEventListener('keypress', e => {
       if (e.keyCode === 13) {
@@ -14,8 +15,7 @@ class InstaChat {
         e.preventDefault()
       }
     })
-
-    container.appendChild(this.chatDiv)
+    document.querySelectorAll('.container')[0].appendChild(this.chatDiv)
   }
 
   connect () {
