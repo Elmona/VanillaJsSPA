@@ -39,6 +39,7 @@ class WindowManager {
       code.init()
       this.addCloseButton(div, this.id)
       this.addMoveWindow(div, this.id)
+      this.addResizeWindow(div, this.id)
     })
   }
 
@@ -51,6 +52,7 @@ class WindowManager {
   }
 
   addMoveWindow (div, id) {
+    // TODO: Clean the EventListeners
     let offset = []
     let isDown = false
     div.querySelector('.top').addEventListener('mousedown', e => {
@@ -71,6 +73,33 @@ class WindowManager {
       }
     })
   }
+
+  addResizeWindow (div, id) {
+    let startX = 0
+    let startY = 0
+    let startHeight = 0
+    let startWidth = 0
+
+    div.querySelector('.resize').addEventListener('mousedown', e => {
+      e.preventDefault()
+      startY = e.pageY
+      startX = e.pageX
+      startHeight = div.clientHeight
+      startWidth = div.clientWidth
+      document.addEventListener('mousemove', mouseMoveHandler)
+      document.addEventListener('mouseup', mouseUpHandler)
+    })
+    const mouseMoveHandler = e => {
+      e.preventDefault()
+      div.style.height = `${startHeight + (e.pageY - startY)}px`
+      div.style.width = `${startWidth + (e.pageX - startX)}px`
+    }
+    const mouseUpHandler = e => {
+      e.preventDefault()
+      document.removeEventListener('mousemove', mouseMoveHandler)
+      document.removeEventListener('mouseup', mouseUpHandler)
+    }
+  }
   addCloseButton (div, id) {
     div.querySelector('.closeButton').addEventListener('click', e => {
       let div = document.querySelector(`#id${id}`)
@@ -81,58 +110,5 @@ class WindowManager {
     })
   }
 }
-/*
-class Window {
-  constructor () {
-    this.id = `#id${id}`
-    this.offset = []
-    this.isDown = false
-    this.box = document.querySelector(`${this.id}`)
-    this.resize = document.querySelector(`${this.id} .resize`)
-    this.startY = 0
-    this.startX = 0
-    this.startHeight = 0
-    this.startWidth = 0
-    document.querySelector(`${this.id} .top`).addEventListener('mousedown', (e) => {
-      this.isDown = true
-      this.offset = [
-        this.box.offsetLeft - e.clientX,
-        this.box.offsetTop - e.clientY
-      ]
-    })
 
-    document.addEventListener('mouseup', () => { this.isDown = false })
-
-    document.addEventListener('mousemove', e => {
-      e.preventDefault()
-      if (this.isDown) {
-        this.box.style.left = `${(e.clientX + this.offset[0])}px`
-        this.box.style.top = `${(e.clientY + this.offset[1])}px`
-      }
-    })
-
-    this.resize.addEventListener('mousedown', e => {
-      e.preventDefault()
-      this.startY = e.pageY
-      this.startX = e.pageX
-      this.startHeight = this.box.clientHeight
-      this.startWidth = this.box.clientWidth
-      document.addEventListener('mousemove', mouseMoveHandler)
-      document.addEventListener('mouseup', mouseUpHandler)
-    })
-
-    const mouseMoveHandler = e => {
-      e.preventDefault()
-      this.box.style.height = `${this.startHeight + (e.pageY - this.startY)}px`
-      this.box.style.width = `${this.startWidth + (e.pageX - this.startX)}px`
-    }
-
-    const mouseUpHandler = e => {
-      e.preventDefault()
-      document.removeEventListener('mousemove', mouseMoveHandler)
-      document.removeEventListener('mouseup', mouseUpHandler)
-    }
-  }
-}
-*/
 module.exports = WindowManager

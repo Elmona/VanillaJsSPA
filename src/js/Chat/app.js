@@ -15,7 +15,7 @@ class Chat {
         e.preventDefault()
       }
     })
-    // this.connect()
+    this.connect()
   }
 
   connect () {
