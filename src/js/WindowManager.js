@@ -89,17 +89,20 @@ class WindowManager {
       document.addEventListener('mousemove', mouseMoveHandler)
       document.addEventListener('mouseup', mouseUpHandler)
     })
+
     const mouseMoveHandler = e => {
       e.preventDefault()
       div.style.height = `${startHeight + (e.pageY - startY)}px`
       div.style.width = `${startWidth + (e.pageX - startX)}px`
     }
+
     const mouseUpHandler = e => {
       e.preventDefault()
       document.removeEventListener('mousemove', mouseMoveHandler)
       document.removeEventListener('mouseup', mouseUpHandler)
     }
   }
+
   addCloseButton (div, id) {
     div.querySelector('.closeButton').addEventListener('click', e => {
       let div = document.querySelector(`#id${id}`)

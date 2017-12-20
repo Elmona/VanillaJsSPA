@@ -1,5 +1,5 @@
 
-const Wm = require('./WindowManager')
-const wm = new Wm()
+const WindowManager = require('./WindowManager')
+const windowManager = new WindowManager()
 
-wm.startDock()
+windowManager.startDock()
