@@ -3,6 +3,7 @@ const Ajax = require('./Ajax')
 class WindowManager {
   constructor () {
     this.id = 0
+    this.eventListeners = []
     this.zIndex = 0
     this.startX = 20
     this.startY = 20
@@ -67,7 +68,6 @@ class WindowManager {
   }
 
   addMoveWindow (div, id) {
-    // TODO: Clean the EventListeners
     let offset = []
     let isDown = false
     div.querySelector('.top').addEventListener('mousedown', e => {
@@ -78,15 +78,20 @@ class WindowManager {
       ]
     })
 
-    document.addEventListener('mouseup', () => { isDown = false })
+    let mouseup = () => { isDown = false }
+    document.addEventListener('mouseup', mouseup)
+    this.addEventListenerToGarbageCollector(id, mouseup, 'mouseup')
 
-    document.addEventListener('mousemove', e => {
+    let mousemove = e => {
       e.preventDefault()
       if (isDown) {
         div.style.left = `${(e.clientX + offset[0])}px`
         div.style.top = `${(e.clientY + offset[1])}px`
       }
-    })
+    }
+
+    document.addEventListener('mousemove', mousemove)
+    this.addEventListenerToGarbageCollector(id, mousemove, 'mousemove')
   }
 
   addResizeWindow (div, id) {
@@ -120,12 +125,25 @@ class WindowManager {
 
   addCloseButton (div, id) {
     div.querySelector('.closeButton').addEventListener('click', e => {
+      this.eventListeners
+        .filter(x => x.id === id)
+        .forEach(x => {
+          document.removeEventListener(x.type, x.eventListener)
+        })
       let div = document.querySelector(`#id${id}`)
       while (div.firstChild) {
         div.removeChild(div.firstChild)
       }
       div.remove()
     })
+  }
+
+  addEventListenerToGarbageCollector (id, eventListener, type) {
+    let obj = {}
+    obj.id = id
+    obj.eventListener = eventListener
+    obj.type = type
+    this.eventListeners.push(obj)
   }
 }
 
