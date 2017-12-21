@@ -80,6 +80,17 @@ class Chat {
           username: this.nick,
           key: config.key
         }
+      } else if (/\/e */.exec(msg) !== null) {
+        msg = msg.replace(/\/e */, '')
+        msg = this.encode(msg, '12345')
+        data = {
+          type: 'message',
+          channel: '',
+          data: msg,
+          encrypted: true,
+          username: this.nick,
+          key: config.key
+        }
       } else {
         data = {
           type: 'message',
@@ -94,12 +105,26 @@ class Chat {
       })
     }
   }
-
+  encode (msg, key) {
+    let enc = ''
+    for (let i = 0; i < msg.length; i++) {
+      let a = msg.charCodeAt(i)
+      let b = a ^ key
+      enc += String.fromCharCode(b)
+    }
+    return enc
+  }
   printMessage (msg) {
     console.log(msg)
+
     if (msg.rovarsprak === true) {
-      msg.data = msg.data.replace(/([bcdfghjklmnpqrstvwxz])o\1/gi, '$1')
+      msg.data = '(R) ' + msg.data.replace(/([bcdfghjklmnpqrstvwxz])o\1/gi, '$1')
     }
+
+    if (msg.encrypted === true) {
+      msg.data = '(E) ' + this.encode(msg.data, '12345')
+    }
+
     let messages = this.div.querySelectorAll('.messages')[0]
     let template = this.div.querySelectorAll('template')[0]
     let messageDiv = document.importNode(template.content, true)
