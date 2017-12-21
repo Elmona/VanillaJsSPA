@@ -66,11 +66,28 @@ class Chat {
       chatMsg.data = `Changing nick to ${this.nick}`
       this.printMessage(chatMsg)
     } else {
-      let data = {
-        type: 'message',
-        data: msg,
-        username: this.nick,
-        key: config.key
+      // Sending message
+      let data = {}
+      re = /\/r */
+      if (re.exec(msg) !== null) {
+        msg = msg.replace(re, '')
+        msg = msg.replace(/([bcdfghjklmnpqrstvwxz])/gi, '$1o$1')
+        data = {
+          type: 'message',
+          channel: '',
+          data: msg,
+          rovarsprak: true,
+          username: this.nick,
+          key: config.key
+        }
+      } else {
+        data = {
+          type: 'message',
+          channel: '',
+          data: msg,
+          username: this.nick,
+          key: config.key
+        }
       }
       this.connect().then(() => {
         this.socket.send(JSON.stringify(data))
@@ -80,6 +97,9 @@ class Chat {
 
   printMessage (msg) {
     console.log(msg)
+    if (msg.rovarsprak === true) {
+      msg.data = msg.data.replace(/([bcdfghjklmnpqrstvwxz])o\1/gi, '$1')
+    }
     let messages = this.div.querySelectorAll('.messages')[0]
     let template = this.div.querySelectorAll('template')[0]
     let messageDiv = document.importNode(template.content, true)
