@@ -3,6 +3,7 @@ const Ajax = require('./Ajax')
 class WindowManager {
   constructor () {
     this.id = 0
+    this.zIndex = 0
     this.startX = 20
     this.startY = 20
     this.container = document.querySelector('.container')
@@ -29,17 +30,24 @@ class WindowManager {
       url: `/js/${appName}/template.html`
     }).then(data => {
       this.id++
+
       let div = document.createElement('div')
       div.setAttribute('class', appName)
       div.setAttribute('id', `id${this.id}`)
       div.innerHTML = data
       this.container.appendChild(div)
+
       const Code = require(`./${appName}/app`)
       const code = new Code(div)
       code.init()
+
+      this.addZIndexFix(div, this.id)
       this.addCloseButton(div, this.id)
       this.addMoveWindow(div, this.id)
       this.addResizeWindow(div, this.id)
+
+      // Put the window at top of the others.
+      div.style.zIndex = ++this.zIndex
     })
   }
 
@@ -49,6 +57,13 @@ class WindowManager {
     const dock = require('./Dock/app')
     this.container.appendChild(div)
     dock(div, this)
+  }
+
+  addZIndexFix (div, id) {
+    // TODO: Fix bug when the zIndex reaches 2147483647 it won't work.
+    div.addEventListener('mousedown', e => {
+      div.style.zIndex = ++this.zIndex
+    })
   }
 
   addMoveWindow (div, id) {
