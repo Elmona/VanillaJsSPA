@@ -91,6 +91,17 @@ class Chat {
           username: this.nick,
           key: config.key
         }
+      } else if (/\/a */.exec(msg) !== null) {
+        msg = msg.replace(/\/a */, '')
+        msg = this.encrypt(msg, 'wdg23baekl')
+        data = {
+          type: 'message',
+          channel: 'random',
+          data: msg,
+          encrypter: true,
+          username: this.nick,
+          key: config.key
+        }
       } else {
         data = {
           type: 'message',
@@ -105,6 +116,7 @@ class Chat {
       })
     }
   }
+  // Emil kryptering
   encode (msg, key) {
     let enc = ''
     for (let i = 0; i < msg.length; i++) {
@@ -114,6 +126,39 @@ class Chat {
     }
     return enc
   }
+
+  // Anton Scramble key
+  scrambleKey (key) {
+    if (typeof key === 'number') {
+      return key * key
+    }
+    return Number.parseInt(
+      Array.from(key.toString())
+        .map((c, i) => c.charCodeAt(0) * i * i--)
+        .reduce((x, y) => x + y, key.length),
+      16
+    )
+  }
+
+  // Anton Decrypt
+  decrypt (str, key) {
+    return str
+      .split('r')
+      .map(c => Number.parseInt(c, 16))
+      .map(c => c / this.scrambleKey(key))
+      .map(c => String.fromCharCode(c))
+      .join('')
+  }
+
+  // Anton Encrypt
+  encrypt (str, key) {
+    return Array.from(str.toString())
+      .map(c => c.charCodeAt(0))
+      .map(c => c * this.scrambleKey(key))
+      .map(c => c.toString(16))
+      .join('r')
+  }
+
   printMessage (msg) {
     console.log(msg)
 
@@ -123,6 +168,10 @@ class Chat {
 
     if (msg.encrypted === true) {
       msg.data = '(E) ' + this.encode(msg.data, '12345')
+    }
+
+    if (msg.encrypter === true) {
+      msg.data = '(A) ' + this.decrypt(msg.data, 'wdg23baekl')
     }
 
     let messages = this.div.querySelectorAll('.messages')[0]
