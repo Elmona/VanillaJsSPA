@@ -4,10 +4,14 @@ const config = require('../config.json')
 class Chat {
   constructor (div) {
     this.div = div
-    this.nick = 'Emil'
+    if (window.localStorage.getItem('nick') === null) {
+      window.localStorage.setItem('nick', 'default')
+      this.nick = 'default'
+    } else {
+      this.nick = window.localStorage.getItem('nick')
+    }
   }
   init () {
-    console.log('Init chat')
     this.div.addEventListener('keypress', e => {
       if (e.keyCode === 13) {
         this.sendMessage(e.target.value)
@@ -63,6 +67,7 @@ class Chat {
     if (re.exec(msg) !== null) {
       let nick = msg.replace(re, '')
       this.nick = nick
+      window.localStorage.setItem('nick', nick)
       chatMsg.data = `Changing nick to ${this.nick}`
       this.printMessage(chatMsg)
     } else {
