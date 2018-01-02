@@ -47,7 +47,7 @@ p {
   position: absolute;
   flex-direction: column;
   width: 409px;;
-  height: 543px;
+  height: 549px;
   top: 20px;
   left: 20px;
   background-color: rgba(0, 0, 0, 0.6);
@@ -79,11 +79,10 @@ p {
 }
 .Memory .bottom {
   align-self: flex-end;
-  /* border: 2px solid rgb(28, 18, 172); */
 }
 .memoryDivImg {
   display: flex;
-  /* flex: 1; */
+  border: 3px solid rgb(0, 0, 0, 0);
   align-items: center;
 }
 #memoryContainer img {
