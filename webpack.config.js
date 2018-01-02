@@ -8,7 +8,7 @@ module.exports = {
   },
   devServer: {
     contentBase: path.join(__dirname, 'src'),
-    watchContentBase: true,
+    // watchContentBase: true,
     port: 4000,
     public: 'localhost:4000'
   },

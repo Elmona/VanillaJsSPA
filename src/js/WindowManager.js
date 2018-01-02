@@ -47,7 +47,7 @@ class WindowManager {
       this.addMoveWindow(div, this.id)
       this.addResizeWindow(div, this.id)
 
-      // Put the window at top of the others.
+      // Put the new window at top of the others.
       div.style.zIndex = ++this.zIndex
     })
   }
@@ -139,11 +139,11 @@ class WindowManager {
   }
 
   addEventListenerToGarbageCollector (id, eventListener, type) {
-    let obj = {}
-    obj.id = id
-    obj.eventListener = eventListener
-    obj.type = type
-    this.eventListeners.push(obj)
+    this.eventListeners.push({
+      id: id,
+      eventListener: eventListener,
+      type: type
+    })
   }
 }
 

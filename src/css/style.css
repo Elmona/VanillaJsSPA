@@ -1,6 +1,6 @@
 body {
   /* background-image: url('/image/bg.jpeg') no-repeat center center fixed; */
-  background-image: url('/image/bg2.jpeg');
+  background-image: url('/image/bg3.jpeg');
   background-color: #28323C;
   background-repeat: no-repeat;
   background-position: center;
@@ -41,6 +41,60 @@ p {
   width: 55px;
   height: 55px;
 }
+/* Memory */
+.Memory {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  width: 409px;;
+  height: 543px;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  box-shadow: 8px 8px 5px rgba(0, 0, 0, 0.3);
+}
+.select {
+  display: flex;
+  padding: 10px;
+  flex-direction: row;
+}
+.Memory p {
+  font-size: 140%;
+  color: white;
+  padding-right: 10px;
+}
+.MemoryRow {
+  display: flex;
+  flex: 1;
+  /* border: 2px solid rgb(224, 115, 65); */
+  justify-content: space-around;
+}
+.Memory a:focus {
+  border: 2px solid rgb(238, 255, 0);
+}
+.Memory .bottom {
+  align-self: flex-end;
+  /* border: 2px solid rgb(28, 18, 172); */
+}
+.memoryDivImg {
+  display: flex;
+  /* flex: 1; */
+  align-items: center;
+}
+#memoryContainer img {
+  width: 100px;
+  max-width: 100%;
+}
+#memoryContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  /* border: 2px solid rgb(236, 223, 34); */
+}
+.removed {
+  visibility: hidden;
+}
 /* Chat */
 .Chat {
   position: absolute;
@@ -56,7 +110,6 @@ p {
 }
 .top {
   display: flex;
-  /* justify-content: center; */
   color: #FFF;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.6);
@@ -118,6 +171,7 @@ p {
   cursor: se-resize;
 }
 .author {
+  white-space: nowrap;
   padding-right: 10px;
 }
 p {
