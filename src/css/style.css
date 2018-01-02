@@ -54,6 +54,10 @@ p {
   border-radius: 10px;
   box-shadow: 8px 8px 5px rgba(0, 0, 0, 0.3);
 }
+.Memory h2 {
+  color: #FFF;
+  padding-left: 10px;
+}
 .select {
   display: flex;
   padding: 10px;

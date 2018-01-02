@@ -8,6 +8,8 @@ class Memory {
     this.turn1 = null
     this.turn2 = null
     this.imgTiles = `image/memory/0/`
+    this.totalClicks = 0
+    this.pair = 0
   }
 
   init (rows = 4, cols = 4) {
@@ -23,6 +25,8 @@ class Memory {
       this.imgTiles = `image/memory/${e.target.value}/`
       this.cleanBoard()
       this.generateGame()
+      this.pair = 0
+      this.totalClicks = 0
     })
   }
 
@@ -55,9 +59,9 @@ class Memory {
   }
 
   turnBrick (tile, index, img) {
+    this.totalClicks++
     if (this.turn2) return
 
-    // img.src = `image/memory/${tile}.png`
     img.src = `${this.imgTiles}${tile}.png`
 
     if (!this.turn1) {
@@ -70,16 +74,22 @@ class Memory {
       this.turn2 = img
       if (this.turn1.src === this.turn2.src) {
         // Found a pair
+        this.pair++
         window.setTimeout(() => {
           this.turn1.parentNode.classList.add('removed')
           this.turn2.parentNode.classList.add('removed')
           this.turn1 = null
           this.turn2 = null
+          // Win condition
+          if (this.pair === (this.rows * this.cols) / 2) {
+            this.cleanBoard()
+            let winText = document.createElement('h2')
+            winText.textContent = 'Won, number of clicks ' + this.totalClicks
+            this.container.appendChild(winText)
+          }
         }, 250)
       } else {
         window.setTimeout(() => {
-          // this.turn1.src = 'image/memory/0.png'
-          // this.turn2.src = 'image/memory/0.png'
           this.turn1.src = `${this.imgTiles}0.png`
           this.turn2.src = `${this.imgTiles}0.png`
           this.turn1 = null
