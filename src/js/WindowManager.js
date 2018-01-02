@@ -7,6 +7,7 @@ class WindowManager {
     this.zIndex = 0
     this.startX = 20
     this.startY = 20
+    this.offsetY = 0
     this.container = document.querySelector('.container')
   }
 
@@ -35,6 +36,16 @@ class WindowManager {
       let div = document.createElement('div')
       div.setAttribute('class', appName)
       div.setAttribute('id', `id${this.id}`)
+      div.style.top = `${this.startX}px`
+      div.style.left = `${this.startY}px`
+      if ((document.body.clientHeight - 790) < this.startX) {
+        this.offsetY += 200
+        this.startX = 20
+        this.startY = this.offsetY
+      } else {
+        this.startX += 20
+        this.startY += 20
+      }
       div.innerHTML = data
       this.container.appendChild(div)
 
