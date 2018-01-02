@@ -20,6 +20,12 @@ p {
   -webkit-user-select: none;
   user-select: none;
 }
+.icon {
+  display: flex;
+  align-self: center;
+  padding-left: 15px;
+  pointer-events: none;
+}
 /* Dock */
 .Dock {
   display: flex;
@@ -165,6 +171,47 @@ p {
   -webkit-user-select: text;
   -moz-user-select: text;
 }
+.author {
+  white-space: nowrap;
+  padding-right: 10px;
+}
+/* Weather */
+.Weather {
+  color: #FFF;
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  width: 409px;;
+  height: 549px;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  box-shadow: 8px 8px 5px rgba(0, 0, 0, 0.3);
+}
+.Weather h1 {
+  font-size: 3em;
+  align-self: center;
+}
+.Weather h2 {
+  font-size: 2em;
+}
+.Weather .row {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.weatherContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.Weather .bottom {
+  align-self: flex-end;
+}
+
 .resize {
   display: flex;
   align-self: flex-end;
@@ -172,10 +219,6 @@ p {
 }
 .resize:hover {
   cursor: se-resize;
-}
-.author {
-  white-space: nowrap;
-  padding-right: 10px;
 }
 p {
   font-size: 100%;
