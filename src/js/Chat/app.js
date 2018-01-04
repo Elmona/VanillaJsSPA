@@ -7,7 +7,7 @@ class Chat {
   }
 
   init () {
-    this.div.addEventListener('keypress', e => {
+    this.sendMessageEventListener = this.div.addEventListener('keypress', e => {
       if (e.keyCode === 13) {
         this.sendMessage(e.target.value)
         e.target.value = ''
@@ -21,6 +21,11 @@ class Chat {
       this.nick = window.localStorage.getItem('nick')
     }
     this.connect()
+  }
+
+  close () {
+    this.socket.close()
+    document.removeEventListener('keypress', this.sendMessageEventListener)
   }
 
   connect () {
@@ -57,6 +62,7 @@ class Chat {
       })
     })
   }
+
   printHelp () {
     let messages = this.div.querySelectorAll('.messages')[0]
     let template = this.div.querySelectorAll('template')[0]
@@ -76,6 +82,7 @@ class Chat {
     `
     messages.appendChild(messageDiv)
   }
+
   sendMessage (msg) {
     // Searching for commands
     let chatMsg = {username: 'Chat'}
@@ -138,6 +145,7 @@ class Chat {
       })
     }
   }
+
   // Emil kryptering
   encode (msg, key) {
     let enc = ''
