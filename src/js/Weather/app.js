@@ -4,13 +4,15 @@ class Weather {
     this.imgUrl = '/image/OpenWeather/'
   }
   init () {
-    console.log('Hello world!')
+    this.div.querySelector('#openWeatherPic').style.visibility = 'hidden'
+
     const btn = this.div.querySelector('#btn')
-    btn.addEventListener('click', e => {
+
+    const success = pos => {
+      let latitude = pos.coords.latitude
+      let longitude = pos.coords.longitude
       let key = '&appid=ffeb8c5cc86b0b7ce7b7d1fd55976ae6'
-      let town = document.querySelector('.Weather #txtTown').value
-      let url = `http://api.openweathermap.org/data/2.5/weather?q=${town}&units=metric`
-      console.log(town)
+      let url = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric`
       window.fetch(`${url}${key}`)
         .then(data => data.json())
         .then(data => {
@@ -21,9 +23,22 @@ class Weather {
             this.div.querySelector('h2')
               .textContent = `${data.weather[0].main}, ${data.main.temp}°C`
             this.div.querySelector('#openWeatherPic')
+              .style.visibility = 'visible'
+            this.div.querySelector('#openWeatherPic')
               .setAttribute('src', `${this.imgUrl}${data.weather[0].icon}.png`)
           }
         })
+    }
+
+    const error = () => {
+      this.div.querySelector('h2')
+        .textContent = 'Something went wrong, did you not accept the browser to get the position?'
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error)
+
+    btn.addEventListener('click', e => {
+      navigator.geolocation.getCurrentPosition(success, error)
     })
   }
 }
