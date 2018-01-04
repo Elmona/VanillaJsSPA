@@ -4,13 +4,8 @@ const config = require('../config.json')
 class Chat {
   constructor (div) {
     this.div = div
-    if (window.localStorage.getItem('nick') === null) {
-      window.localStorage.setItem('nick', 'default')
-      this.nick = 'default'
-    } else {
-      this.nick = window.localStorage.getItem('nick')
-    }
   }
+
   init () {
     this.div.addEventListener('keypress', e => {
       if (e.keyCode === 13) {
@@ -19,6 +14,12 @@ class Chat {
         e.preventDefault()
       }
     })
+    if (window.localStorage.getItem('nick') === null) {
+      window.localStorage.setItem('nick', 'default')
+      this.nick = 'default'
+    } else {
+      this.nick = window.localStorage.getItem('nick')
+    }
     this.connect()
   }
 
@@ -56,16 +57,33 @@ class Chat {
       })
     })
   }
+  printHelp () {
+    let messages = this.div.querySelectorAll('.messages')[0]
+    let template = this.div.querySelectorAll('template')[0]
+    let messageDiv = document.importNode(template.content, true)
 
+    messageDiv.querySelectorAll('.author')[0].textContent = ``
+    messageDiv.querySelectorAll('.text')[0].innerHTML =
+    `
+    <hr>
+    <p>You can use this commands in the chatt</p><br>
+    <p>/help Show this dialog</p>
+    <p>/nick NICK To change nickname</p>
+    <p>/r MSG use 'Rövarspråk'</p>
+    <p>/e MSG use Encryption</p>
+    <p>/a MSG use Anton encryption</p>
+    <hr>
+    `
+    messages.appendChild(messageDiv)
+  }
   sendMessage (msg) {
     // Searching for commands
-    let re = ''
-    let chatMsg = {}
-    chatMsg.username = 'Chat'
+    let chatMsg = {username: 'Chat'}
 
-    re = /\/nick */
-    if (re.exec(msg) !== null) {
-      let nick = msg.replace(re, '')
+    if (/\/help */.exec(msg) !== null) {
+      this.printHelp()
+    } else if (/\/nick */.exec(msg) !== null) {
+      let nick = msg.replace(/\/nick */, '')
       this.nick = nick
       window.localStorage.setItem('nick', nick)
       chatMsg.data = `Changing nick to ${this.nick}`
@@ -73,9 +91,8 @@ class Chat {
     } else {
       // Sending message
       let data = {}
-      re = /\/r */
-      if (re.exec(msg) !== null) {
-        msg = msg.replace(re, '')
+      if (/\/r */.exec(msg) !== null) {
+        msg = msg.replace(/\/r */, '')
         msg = msg.replace(/([bcdfghjklmnpqrstvwxz])/gi, '$1o$1')
         data = {
           type: 'message',
@@ -186,7 +203,7 @@ class Chat {
     messageDiv.querySelectorAll('.text')[0].textContent = msg.data
     messageDiv.querySelectorAll('.author')[0].textContent = `${this.getTime()} ${msg.username}: `
     console.log(`${msg.username}:${msg.data}`)
-    this.div.querySelectorAll('.messages')[0].appendChild(messageDiv)
+    messages.appendChild(messageDiv)
 
     // Scroll to bottom of chat window
     messages.scrollTop = messages.scrollHeight
