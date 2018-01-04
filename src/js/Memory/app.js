@@ -25,6 +25,7 @@ class Memory {
       this.imgTiles = `image/memory/${e.target.value}/`
       this.cleanBoard()
       this.generateGame()
+      document.removeEventListener('click', this.clickHandler)
       this.pair = 0
       this.totalClicks = 0
     })
@@ -38,6 +39,7 @@ class Memory {
 
   generateGame () {
     let index = 0
+
     for (let cols = 0; cols < this.cols; cols++) {
       let div = document.createElement('div')
       div.setAttribute('class', 'MemoryRow')
@@ -50,11 +52,15 @@ class Memory {
       }
       this.container.appendChild(div)
     }
-    this.container.addEventListener('click', e => {
+
+    this.clickHandler = this.container.addEventListener('click', e => {
       e.preventDefault()
-      let img = e.target.nodeName === 'IMG' ? e.target : e.target.firstElementChild
-      let index = parseInt(img.getAttribute('data-brickNumber'))
-      this.turnBrick(this.tiles[index], index, img)
+      if (!e.target.classList.contains('MemoryRow')) {
+        console.log(e.target)
+        let img = e.target.nodeName === 'IMG' ? e.target : e.target.firstElementChild
+        let index = parseInt(img.getAttribute('data-brickNumber'))
+        this.turnBrick(this.tiles[index], index, img)
+      }
     })
   }
 
