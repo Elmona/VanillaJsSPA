@@ -15,12 +15,12 @@ class Chat {
       }
     })
     if (window.localStorage.getItem('nick') === null) {
-      window.localStorage.setItem('nick', 'default')
-      this.nick = 'default'
+      this.nickNotSet = true
+      this.printWelcomeMessage()
     } else {
       this.nick = window.localStorage.getItem('nick')
+      this.connect()
     }
-    this.connect()
   }
 
   close () {
@@ -83,11 +83,32 @@ class Chat {
     messages.appendChild(messageDiv)
   }
 
+  printWelcomeMessage () {
+    let messages = this.div.querySelectorAll('.messages')[0]
+    let template = this.div.querySelectorAll('template')[0]
+    let messageDiv = document.importNode(template.content, true)
+
+    messageDiv.querySelectorAll('.author')[0].textContent = ``
+    messageDiv.querySelectorAll('.text')[0].innerHTML =
+    `
+    <hr>
+    <p>Welcome to the LNU chat</p><br>
+    <p>Enter your nickname and press enter to start chatting</p>
+    <p>/help for help dialog</p>
+    <hr>
+    `
+    messages.appendChild(messageDiv)
+  }
+
   sendMessage (msg) {
     // Searching for commands
     let chatMsg = {username: 'Chat'}
-
-    if (/\/help */.exec(msg) !== null) {
+    if (this.nickNotSet === true) {
+      window.localStorage.setItem('nick', msg)
+      this.nickNotSet = false
+      this.nick = msg
+      this.connect()
+    } else if (/\/help */.exec(msg) !== null) {
       this.printHelp()
     } else if (/\/nick */.exec(msg) !== null) {
       let nick = msg.replace(/\/nick */, '')
