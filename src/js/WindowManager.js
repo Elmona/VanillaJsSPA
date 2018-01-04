@@ -132,8 +132,10 @@ class WindowManager {
 
     const mouseMoveHandler = e => {
       e.preventDefault()
-      div.style.height = `${startHeight + (e.pageY - startY)}px`
-      div.style.width = `${startWidth + (e.pageX - startX)}px`
+      let newHeight = startHeight + (e.pageY - startY)
+      let newWidth = startWidth + (e.pageX - startX)
+      if (startHeight < newHeight) div.style.height = `${newHeight}px`
+      if (startWidth < newWidth) div.style.width = `${newWidth}px`
     }
 
     const mouseUpHandler = e => {
