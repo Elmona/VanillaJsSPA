@@ -46,7 +46,7 @@ class WindowManager {
       code.init()
 
       this.addZIndexFix(div, this.id)
-      this.addCloseButton(div, this.id)
+      this.addCloseButton(div, this.id, code)
       this.addMoveWindow(div, this.id)
       this.addResizeWindow(div, this.id)
 
@@ -143,18 +143,24 @@ class WindowManager {
     }
   }
 
-  addCloseButton (div, id) {
+  addCloseButton (div, id, obj) {
     div.querySelector('.closeButton').addEventListener('click', e => {
+      // Check if my app have a close function then run it.
+      if (typeof obj.close === 'function') {
+        obj.close()
+      }
+
       this.eventListeners
         .filter(x => x.id === id)
         .forEach(x => {
           document.removeEventListener(x.type, x.eventListener)
         })
-      let div = document.querySelector(`#id${id}`)
+
       while (div.firstChild) {
         div.removeChild(div.firstChild)
       }
       div.remove()
+      obj = null
     })
   }
 
