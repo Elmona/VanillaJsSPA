@@ -37,10 +37,9 @@ class WindowManager {
       div.setAttribute('class', appName)
       div.setAttribute('id', `id${this.id}`)
 
-      this.setOpenOffset(div)
-
       div.innerHTML = data
       this.container.appendChild(div)
+      this.setOpenOffset(div)
 
       const Code = require(`./${appName}/app`)
       const code = new Code(div)
@@ -57,11 +56,11 @@ class WindowManager {
   }
 
   setOpenOffset (div) {
-    if ((document.body.clientHeight - 770) < this.startX) {
+    if (((document.body.clientHeight - div.scrollHeight) - 100) < this.startX) {
       this.offsetY += 200
       this.startX = 20
       this.startY = this.offsetY
-    } if ((document.body.clientWidth - 150) < this.startY) {
+    } if ((document.body.clientWidth - div.scrollWidth) < this.startY) {
       this.startY = 20
       this.startX = 20
       this.offsetY = 20
