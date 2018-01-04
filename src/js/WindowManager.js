@@ -36,16 +36,9 @@ class WindowManager {
       let div = document.createElement('div')
       div.setAttribute('class', appName)
       div.setAttribute('id', `id${this.id}`)
-      div.style.top = `${this.startX}px`
-      div.style.left = `${this.startY}px`
-      if ((document.body.clientHeight - 790) < this.startX) {
-        this.offsetY += 200
-        this.startX = 20
-        this.startY = this.offsetY
-      } else {
-        this.startX += 20
-        this.startY += 20
-      }
+
+      this.setOpenOffset(div)
+
       div.innerHTML = data
       this.container.appendChild(div)
 
@@ -61,6 +54,23 @@ class WindowManager {
       // Put the new window at top of the others.
       div.style.zIndex = ++this.zIndex
     })
+  }
+
+  setOpenOffset (div) {
+    if ((document.body.clientHeight - 770) < this.startX) {
+      this.offsetY += 200
+      this.startX = 20
+      this.startY = this.offsetY
+    } if ((document.body.clientWidth - 150) < this.startY) {
+      this.startY = 20
+      this.startX = 20
+      this.offsetY = 20
+    } else {
+      this.startX += 20
+      this.startY += 20
+    }
+    div.style.top = `${this.startX}px`
+    div.style.left = `${this.startY}px`
   }
 
   startDock () {
