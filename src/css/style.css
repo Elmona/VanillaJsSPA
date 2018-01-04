@@ -92,6 +92,7 @@ p {
   align-items: center;
 }
 #memoryContainer img {
+  pointer-events: none;
   width: 100px;
   max-width: 100%;
 }
@@ -170,6 +171,7 @@ p {
   flex-direction: row;
   -webkit-user-select: text;
   -moz-user-select: text;
+  word-break: break-all;
 }
 .author {
   white-space: nowrap;
@@ -207,6 +209,12 @@ p {
   display: flex;
   flex: 1;
   flex-direction: column;
+}
+#openWeatherPic {
+  background-color: #FFF;
+  margin-right: 10px;
+  border-radius: 50%;
+  padding: 5px;
 }
 .Weather .bottom {
   align-self: flex-end;
