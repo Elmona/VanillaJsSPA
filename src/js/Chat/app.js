@@ -101,69 +101,48 @@ class Chat {
   }
 
   sendMessage (msg) {
-    // Searching for commands
-    let chatMsg = {username: 'Chat'}
-    if (this.nickNotSet === true) {
-      window.localStorage.setItem('nick', msg)
-      this.nickNotSet = false
-      this.nick = msg
-      this.connect()
-    } else if (/\/help */.exec(msg) !== null) {
-      this.printHelp()
-    } else if (/\/nick */.exec(msg) !== null) {
-      let nick = msg.replace(/\/nick */, '')
-      this.nick = nick
-      window.localStorage.setItem('nick', nick)
-      chatMsg.data = `Changing nick to ${this.nick}`
-      this.printMessage(chatMsg)
-    } else {
-      // Sending message
-      let data = {}
-      if (/\/r */.exec(msg) !== null) {
-        msg = msg.replace(/\/r */, '')
-        msg = msg.replace(/([bcdfghjklmnpqrstvwxz])/gi, '$1o$1')
-        data = {
-          type: 'message',
-          channel: '',
-          data: msg,
-          rovarsprak: true,
-          username: this.nick,
-          key: config.key
-        }
-      } else if (/\/e */.exec(msg) !== null) {
-        msg = msg.replace(/\/e */, '')
-        msg = this.encode(msg, '12345')
-        data = {
-          type: 'message',
-          channel: '',
-          data: msg,
-          encrypted: true,
-          username: this.nick,
-          key: config.key
-        }
-      } else if (/\/a */.exec(msg) !== null) {
-        msg = msg.replace(/\/a */, '')
-        msg = this.encrypt(msg, 'wdg23baekl')
-        data = {
-          type: 'message',
-          channel: 'random',
-          data: msg,
-          encrypter: true,
-          username: this.nick,
-          key: config.key
-        }
+    if (msg.length !== 0) {
+      let chatMsg = {username: 'Chat'}
+      if (this.nickNotSet === true) {
+        window.localStorage.setItem('nick', msg)
+        this.nickNotSet = false
+        this.nick = msg
+        this.connect()
+      } else if (/\/help */.exec(msg) !== null) {
+        this.printHelp()
+      } else if (/\/nick */.exec(msg) !== null) {
+        let nick = msg.replace(/\/nick */, '')
+        this.nick = nick
+        window.localStorage.setItem('nick', nick)
+        chatMsg.data = `Changing nick to ${this.nick}`
+        this.printMessage(chatMsg)
       } else {
-        data = {
+        // Sending message
+        let data = {
           type: 'message',
           channel: '',
-          data: msg,
           username: this.nick,
           key: config.key
         }
+
+        if (/\/r */.exec(msg) !== null) {
+          msg = msg.replace(/\/r */, '')
+          msg = msg.replace(/([bcdfghjklmnpqrstvwxz])/gi, '$1o$1')
+          data.rovarsprak = true
+        } else if (/\/e */.exec(msg) !== null) {
+          msg = msg.replace(/\/e */, '')
+          msg = this.encode(msg, '12345')
+          data.encrypted = true
+        } else if (/\/a */.exec(msg) !== null) {
+          msg = msg.replace(/\/a */, '')
+          msg = this.encrypt(msg, 'wdg23baekl')
+          data.encrypter = true
+        }
+        data.data = msg
+        this.connect().then(() => {
+          this.socket.send(JSON.stringify(data))
+        })
       }
-      this.connect().then(() => {
-        this.socket.send(JSON.stringify(data))
-      })
     }
   }
 
