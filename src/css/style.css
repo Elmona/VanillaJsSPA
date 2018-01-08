@@ -219,7 +219,25 @@ p {
 .Weather .bottom {
   align-self: flex-end;
 }
-
+/* Paint */
+.Paint {
+  color: #FFF;
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  width: 410px;
+  height: 394px;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  box-shadow: 8px 8px 5px rgba(0, 0, 0, 0.3);
+}
+.Paint canvas {
+  display: flex;
+  flex: 1;
+  background-color: #FFF;
+}
 .resize {
   display: flex;
   align-self: flex-end;
