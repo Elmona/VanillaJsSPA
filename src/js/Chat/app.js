@@ -1,11 +1,26 @@
+/**
+ * Module for Examination 3
+ * Chat application.
+ *
+ * @author Emil Larsson
+ * @version 1.0.0
+ */
 
 const config = require('../config.json')
 
 class Chat {
+  /**
+  *  @constructor
+  *  @param {Element} - Reference to div to where the app is.
+  */
   constructor (div) {
     this.div = div
   }
 
+  /**
+  *  init - Starts the application
+  *  Add EventListener to send messages, checks if nickname is set in localstorage.
+  */
   init () {
     this.sendMessageEventListener = this.div.addEventListener('keypress', e => {
       if (e.keyCode === 13) {
@@ -23,11 +38,18 @@ class Chat {
     }
   }
 
+  /**
+  *  close - Close function
+  *  Closes the socket and remove EventListener.
+  */
   close () {
     this.socket.close()
     document.removeEventListener('keypress', this.sendMessageEventListener)
   }
 
+  /**
+  *  connect - Connect to server.
+  */
   connect () {
     return new Promise((resolve, reject) => {
       if (this.socket && this.socket.readyState === 1) {
@@ -63,6 +85,9 @@ class Chat {
     })
   }
 
+  /**
+  *  printHelp - Prints help in chat window
+  */
   printHelp () {
     let messages = this.div.querySelectorAll('.messages')[0]
     let template = this.div.querySelectorAll('template')[0]
@@ -83,6 +108,9 @@ class Chat {
     messages.appendChild(messageDiv)
   }
 
+  /**
+  *  printWelcomeMessage - Prints welcome message in chat window
+  */
   printWelcomeMessage () {
     let messages = this.div.querySelectorAll('.messages')[0]
     let template = this.div.querySelectorAll('template')[0]
@@ -100,6 +128,11 @@ class Chat {
     messages.appendChild(messageDiv)
   }
 
+  /**
+  *  sendMessage - Send message to server
+  *  First check if message contains command else send message.
+  *  @param {string} - the msg.
+  */
   sendMessage (msg) {
     if (msg.length !== 0) {
       let chatMsg = {username: 'Chat'}
@@ -146,7 +179,11 @@ class Chat {
     }
   }
 
-  // Emil kryptering
+  /**
+  *  encode - Simple encryption
+  *  @param {String} msg - The string to encrypt/decrypt.
+  *  @param {String} key - The key to use with encrypt/decrypt.
+  */
   encode (msg, key) {
     let enc = ''
     for (let i = 0; i < msg.length; i++) {
@@ -157,7 +194,10 @@ class Chat {
     return enc
   }
 
-  // Anton Scramble key
+  /**
+  *  scrambleKey - Developed by Anton
+  *  @param {String} key - The key to use with encrypt/decrypt.
+  */
   scrambleKey (key) {
     if (typeof key === 'number') {
       return key * key
@@ -170,7 +210,12 @@ class Chat {
     )
   }
 
-  // Anton Decrypt
+  /**
+  *  decrypt - Developed by Anton
+  *  @param {String} str - The string to decrypt.
+  *  @param {String} key - The key to use with decrypt.
+  *  @return {String} - The decrypted string.
+  */
   decrypt (str, key) {
     return str
       .split('r')
@@ -180,7 +225,12 @@ class Chat {
       .join('')
   }
 
-  // Anton Encrypt
+  /**
+  *  encrypt - Developed by Anton
+  *  @param {String} str - The string to encrypt.
+  *  @param {String} key - The key to use with encrypt.
+  *  @return {String} - The encrypted string.
+  */
   encrypt (str, key) {
     return Array.from(str.toString())
       .map(c => c.charCodeAt(0))
@@ -189,6 +239,10 @@ class Chat {
       .join('r')
   }
 
+  /**
+  *  printMessage - Print the message to screen
+  *  @param {Object} msg - The object to print.
+  */
   printMessage (msg) {
     console.log(msg)
 
@@ -217,6 +271,10 @@ class Chat {
     messages.scrollTop = messages.scrollHeight
   }
 
+  /**
+  *  getTime - Return the the current time as string
+  *  @return {String} - Returns string [hh:mm]
+  */
   getTime () {
     let date = new Date()
     let hours = date.getHours()
