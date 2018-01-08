@@ -1,5 +1,17 @@
+/**
+ * Module for Examination 3
+ * Creates and manages Apps
+ *
+ * @author Emil Larsson
+ * @version 1.0.0
+ */
+
 const Ajax = require('./Ajax')
 
+/**
+ *  WindowManager
+ *  @constructor
+ */
 class WindowManager {
   constructor () {
     this.id = 0
@@ -11,6 +23,12 @@ class WindowManager {
     this.container = document.querySelector('.container')
   }
 
+  /**
+  *  getTemplate - Creates an element and add html from template.
+  *
+  *  @param {string} appName - Name of app to add code from folder.
+  *  @returns {Element}
+  */
   getTemplate (appName) {
     let div = document.createElement('div')
     div.setAttribute('class', appName)
@@ -25,8 +43,14 @@ class WindowManager {
     return div
   }
 
+  /**
+  *  startApp - Creates an element and add html from template.
+  *  Add app to container and rune code from app catalog.
+  *  Set zIndex, CloseButton, resizeButton, resizeWindow.
+  *
+  *  @param {string} appName - Name of app to add code from folder.
+  */
   startApp (appName) {
-    console.log(`Starting: ${appName}`)
     Ajax({
       method: 'GET',
       url: `/js/${appName}/template.html`
@@ -55,6 +79,11 @@ class WindowManager {
     })
   }
 
+  /**
+  *  setOpenOffset - Moves window position in top and left so they don't open on top of each other.
+  *
+  *  @param {Element} App - Reference to the div element.
+  */
   setOpenOffset (div) {
     if (((document.body.clientHeight - div.scrollHeight) - 100) < this.startX) {
       this.offsetY += 200
@@ -72,14 +101,23 @@ class WindowManager {
     div.style.left = `${this.startY}px`
   }
 
+  /**
+  *  startDock - Start the dock.
+  *
+  */
   startDock () {
-    console.log('Starting dock!')
     let div = this.getTemplate('Dock')
     const dock = require('./Dock/app')
     this.container.appendChild(div)
     dock(div, this)
   }
 
+  /**
+  *  addZIndexFix - Add EventListener to change zIndex so the current window is on top.
+  *
+  *  @param {Element} div - Reference to the div element.
+  *  @param {Number} id - Id of current window
+  */
   addZIndexFix (div, id) {
     // TODO: Fix bug when the zIndex reaches 2147483647 it won't work.
     div.addEventListener('mousedown', e => {
@@ -87,6 +125,12 @@ class WindowManager {
     })
   }
 
+  /**
+  *  addMoveWindow - Add EventListener to make the window moveable.
+  *
+  *  @param {Element} div - Reference to the div element.
+  *  @param {Number} id - Id of current window
+  */
   addMoveWindow (div, id) {
     let offset = []
     let isDown = false
@@ -114,6 +158,12 @@ class WindowManager {
     this.addEventListenerToGarbageCollector(id, mousemove, 'mousemove')
   }
 
+  /**
+  *  addResizeWindow - Add EventListener to make the window resizable.
+  *
+  *  @param {Element} div - Reference to the div element.
+  *  @param {Number} id - Id of current window
+  */
   addResizeWindow (div, id) {
     let startX = 0
     let startY = 0
@@ -145,6 +195,13 @@ class WindowManager {
     }
   }
 
+  /**
+  *  addCloseButton - Add EventListener to close the current window.
+  *
+  *  @param {Element} div - Reference to the div element.
+  *  @param {Number} id - Id of current window
+  *  @param {obj} obj - Reference to app object.
+  */
   addCloseButton (div, id, obj) {
     div.querySelector('.closeButton').addEventListener('click', e => {
       // Check if my app have a close function then run it.
@@ -166,6 +223,13 @@ class WindowManager {
     })
   }
 
+  /**
+  *  addEventListenerToGarbageCollector - Push EventListener to object so i can remove them later.
+  *
+  *  @param {Number} id - Id of current window
+  *  @param {Function} eventListener - Reference to the function.
+  *  @param {String} type - What the EventListener listens to.
+  */
   addEventListenerToGarbageCollector (id, eventListener, type) {
     this.eventListeners.push({
       id: id,
