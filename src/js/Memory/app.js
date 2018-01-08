@@ -1,5 +1,17 @@
+/**
+ * Module for Examination 3
+ * Memory game
+ *
+ * @author Emil Larsson
+ * @version 1.0.0
+ */
 
 class Memory {
+  /**
+  *  Memory
+  *  @constructor
+  *  @param {Element} - Reference to div to where the app is.
+  */
   constructor (div) {
     this.div = div
     this.container = div.querySelector(`#memoryContainer`)
@@ -12,6 +24,12 @@ class Memory {
     this.pair = 0
   }
 
+  /**
+  *  init - Init the app
+  *
+  *  @param {Number} rows - Number of rows in game.
+  *  @param {Number} cols - Number of cols in game.
+  */
   init (rows = 4, cols = 4) {
     this.cols = cols
     this.rows = rows
@@ -20,6 +38,10 @@ class Memory {
     this.selectTiles()
   }
 
+  /**
+  *  selectTiles - EventListener that changes the tiles in game.
+  *
+  */
   selectTiles () {
     this.div.querySelector('select').addEventListener('change', e => {
       this.imgTiles = `image/memory/${e.target.value}/`
@@ -31,12 +53,20 @@ class Memory {
     })
   }
 
+  /**
+  *  cleanBoard - Remove all images.
+  *
+  */
   cleanBoard () {
     while (this.container.firstChild) {
       this.container.removeChild(this.container.firstChild)
     }
   }
 
+  /**
+  *  generateGame - Generate the game
+  *
+  */
   generateGame () {
     let index = 0
 
@@ -64,6 +94,13 @@ class Memory {
     })
   }
 
+  /**
+  *  turnBrick - Turn brick
+  *  @param {Number} - tile
+  *  @param {Number} - index
+  *  @param {Element} - Reference to the image. 
+  *
+  */
   turnBrick (tile, index, img) {
     this.totalClicks++
     if (this.turn2) return
@@ -105,6 +142,12 @@ class Memory {
     }
   }
 
+  /**
+  *  getPictureArray - Generates the array, shuffle the order.
+  *  @param {Number} - rows
+  *  @param {Number} - cols
+  *
+  */
   getPictureArray (rows, cols) {
     for (let i = 1; i <= (rows * cols) / 2; i++) {
       this.tiles.push(i)
