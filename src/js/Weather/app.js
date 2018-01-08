@@ -1,13 +1,34 @@
+/**
+ * Module for Examination 3
+ * Get current Weather based on your position.
+ *
+ * @author Emil Larsson
+ * @version 1.0.0
+ */
 class Weather {
+  /**
+  *  Memory
+  *  @constructor
+  *  @param {Element} - Reference to div to where the app is.
+  */
   constructor (div) {
     this.div = div
     this.imgUrl = '/image/OpenWeather/'
   }
+
+  /**
+  *  init - Init the app
+  *
+  */
   init () {
     this.div.querySelector('#openWeatherPic').style.visibility = 'hidden'
 
     const btn = this.div.querySelector('#btn')
 
+    /**
+    *  success - Called when the browser returned gps position, gets weather and print to screen.
+    *  @param {Object} - Object containing longitude and latitude
+    */
     const success = pos => {
       let latitude = pos.coords.latitude
       let longitude = pos.coords.longitude
@@ -30,7 +51,12 @@ class Weather {
         })
     }
 
-    const error = () => {
+    /**
+    *  error - When something goes wrong print message to screen
+    *  @param {Object} - Object containing error information
+    */
+    const error = e => {
+      console.log(e)
       this.div.querySelector('h2')
         .textContent = 'Something went wrong, did you not accept the browser to get the position?'
     }
