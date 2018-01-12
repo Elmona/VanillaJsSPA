@@ -17,23 +17,41 @@ class Paint {
     this.mouseX = 0
     this.mouseY = 0
     this.yOffset = 110
-    this.brushSize = 5
+    this.brushSize = 50
     this.color = '#000'
+    this.id = 0
   }
 
   init () {
+    this.container.querySelector('#testButton').addEventListener('click', e => {
+      console.log(this.picture)
+    })
     this.container.querySelector('.PaintColor').addEventListener('change', e => {
       this.color = e.target.value
     })
+
     this.container.querySelector('.PaintRange').addEventListener('change', e => {
       this.brushSize = e.target.value
     })
+
     this.canvas.addEventListener('mousedown', e => {
       this.mouseX = e.clientX - this.container.offsetLeft
       this.mouseY = e.clientY - this.container.offsetTop - this.yOffset
+
+      // TODO: Make a dot the size of the brush
+      this.context.beginPath()
+      this.context.fillStyle = this.color
+      this.context.arc(this.mouseX, this.mouseY, this.brushSize / 2, 0, 2 * Math.PI, true)
+      this.context.fill()
+
       this.picture.push({
-        x: this.mouseX,
-        y: this.mouseY
+        id: ++this.id,
+        brushSize: this.brushSize,
+        color: this.color,
+        line: [{
+          x: this.mouseX,
+          y: this.mouseY
+        }]
       })
       this.paint = true
     })
@@ -43,8 +61,12 @@ class Paint {
       this.mouseY = e.clientY - this.container.offsetTop - this.yOffset
 
       if (this.paint) {
-        this.line.push({x: this.mouseX, y: this.mouseY})
-        this.drawLine()
+        let x = this.picture.filter(x => x.id === this.id)
+        x[0].line.push({x: this.mouseX, y: this.mouseY})
+
+        // this.line.push({x: this.mouseX, y: this.mouseY})
+        // this.drawLine()
+        this.drawPicture()
       }
 
       this.container.querySelector('h6').textContent = `x: ${this.pad(this.mouseX)} y: ${this.pad(this.mouseY)}`
@@ -55,18 +77,36 @@ class Paint {
     })
   }
 
-  pad (num) {
-    if (num < 10) {
-      return '00' + num
-    } else if (num < 100) {
-      return '0' + num
-    } else {
-      return num
-    }
+  drawPicture () {
+    this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height)
+    this.picture.forEach(x => {
+      this.context.strokeStyle = x.color
+      this.context.fillStyle = x.color
+      this.context.lineWidth = x.brushSize
+      this.context.lineJoin = 'round'
+
+      if (x.line.length === 1) {
+        this.context.beginPath()
+        this.context.arc(x.line[0].x, x.line[0].y, x.brushSize / 2, 0, 2 * Math.PI, true)
+        this.context.fill()
+      } else {
+        x.line.forEach((l, i) => {
+          if (i > 0) {
+            this.context.beginPath()
+            let prevX = x.line[i - 1].x
+            let prevY = x.line[i - 1].y
+            this.context.moveTo(prevX, prevY)
+            this.context.lineTo(l.x, l.y)
+            this.context.closePath()
+            this.context.stroke()
+          }
+        })
+      }
+    })
   }
 
   drawLine () {
-    this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height)
+    // this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height)
     this.context.strokeStyle = this.color
     this.context.lineWidth = this.brushSize
     this.context.lineJoin = 'round'
@@ -83,26 +123,15 @@ class Paint {
       }
     })
   }
+  pad (num) {
+    if (num < 10) {
+      return '00' + num
+    } else if (num < 100) {
+      return '0' + num
+    } else {
+      return num
+    }
+  }
 }
 
 module.exports = Paint
-    /*
-    this.picture.forEach(x => {
-      if (x.type === 'dot') {
-        // console.log(x)
-        this.context.beginPath()
-        this.context.arc(x.x, x.y + 18, 10, 0, 2 * Math.PI, true)
-        this.context.fill()
-      }
-    })
-    */
-     /*
-      this.context.beginPath()
-      this.context.arc(mouseX, mouseY + 18, 10, 0, 2 * Math.PI, true)
-      this.picture.push({
-        type: 'dot',
-        x: mouseX,
-        y: mouseY + 18
-      })
-      this.context.fill()
-      */
