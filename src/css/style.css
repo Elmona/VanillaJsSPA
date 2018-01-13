@@ -225,18 +225,46 @@ p {
   display: flex;
   position: absolute;
   flex-direction: column;
-  width: 410px;
-  height: 394px;
+  width: 600px;
+  height: 588px;
   top: 20px;
   left: 20px;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   box-shadow: 8px 8px 5px rgba(0, 0, 0, 0.3);
 }
+#topPaint {
+  /* display: flex; */
+  /* flex-basis: 20px; */
+  height: 100px;
+}
 .Paint canvas {
+  position: relative;
   display: flex;
   flex: 1;
   background-color: #FFF;
+}
+.Paint .settings {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  justify-content: space-around;
+}
+.Paint .settings  input {
+  align-self: center;
+}
+.Paint h6 {
+  align-self: center;
+  color: #FFF;
+  font-size: 1em;
+}
+.Paint .bottom {
+  align-self: flex-end;
+}
+#cursor {
+  position: absolute;
+  left: 10px;
+  top: 10px;
 }
 .resize {
   display: flex;

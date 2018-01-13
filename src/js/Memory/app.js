@@ -46,6 +46,8 @@ class Memory {
     this.div.querySelector('select').addEventListener('change', e => {
       this.imgTiles = `image/memory/${e.target.value}/`
       this.cleanBoard()
+      this.tiles = []
+      this.getPictureArray(this.rows, this.cols)
       this.generateGame()
       document.removeEventListener('click', this.clickHandler)
       this.pair = 0
@@ -98,7 +100,7 @@ class Memory {
   *  turnBrick - Turn brick
   *  @param {Number} - tile
   *  @param {Number} - index
-  *  @param {Element} - Reference to the image. 
+  *  @param {Element} - Reference to the image.
   *
   */
   turnBrick (tile, index, img) {
